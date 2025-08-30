@@ -1,0 +1,16 @@
+info (
+	title: "后台系统admin"
+	author: "gitee.com/dn-jinmin"
+)
+type (
+      IdPathReq {
+          Id string `uri:"id,omitempty"`
+      }
+      IdResp {
+          Id string `json:"id,omitempty"`
+      }
+      IdRespInfo {
+        Code int `json:"code"`
+        Data *IdResp `json:"data"`
+      }
+)

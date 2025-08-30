@@ -1,0 +1,29 @@
+Name: api
+Addr: 0.0.0.0:8888
+Host: "http://127.0.0.1:8888"
+Ws:
+  Addr: 0.0.0.0:9000
+Mongo:
+  User: ""
+  Password: ""
+  Hosts: ["127.0.0.1"]
+  Port: 27017
+  Database: "aiworkc"
+MysqlDns: "root:20050606a@tcp(127.0.0.1:3306)/airwork"
+Jwt:
+  Secret: "LunBoWang"
+  Expire: 8640000
+Tlog:
+  Mode: 1
+  Label: "aiworkc"
+Langchain:
+  Url:  "https://api.openai-proxy.org/v1"
+  ApiKey: "sk-eBf9hEicOVbobp2NbCRt67TsPB0fuhcl8iu09RpOKRJZj71s"
+AliGPT:
+  Url:  "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  ApiKey: "sk-6b23fbcde4df48c69560aa5a0a508e40"
+Upload:
+  SavePath: "upload/"
+  Host: "http://127.0.0.1:8000"
+Redis:
+  Addr: "123.60.76.178:6379"

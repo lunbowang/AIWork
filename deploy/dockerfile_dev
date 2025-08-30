@@ -1,0 +1,14 @@
+FROM alpine
+RUN apk update &&\
+    apk --no-cache add tzdata && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" >  /etc/timezone
+ENV TZ=Asia/Shanghai
+RUN apk add --update ca-certificates && \
+    rm -rf /var/cache/apk/* /tmp/* && \
+    update-ca-certificates
+
+ADD api-dev /api-dev
+ADD etc/dev /etc
+
+ENTRYPOINT [ "/api-dev", "-f", "/etc/api.yaml" ]

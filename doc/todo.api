@@ -1,0 +1,122 @@
+syntax = "v1"
+
+info (
+	title: "后台系统admin"
+	author: "gitee.com/dn-jinmin"
+)
+
+type (
+    TodoRecord  {
+        TodoId   string  `json:"todoId,omitempty"`
+        UserId   string  `json:"userId,omitempty"`
+        UserName string  `json:"userName,omitempty"`
+        Content  string  `json:"content,omitempty"`
+        Image    string  `json:"image,omitempty"`
+        CreateAt int64   `json:"createAt,omitempty"`
+    }
+
+    Todo  {
+        ID         string        `json:"id,omitempty"`
+        CreatorId  string        `json:"creatorId,omitempty"`
+        CreatorName string       `json:"creatorName,omitempty"`
+        Title      string        `json:"title,omitempty"`
+        DeadlineAt int64         `json:"deadlineAt,omitempty"`
+        Desc       string        `json:"desc,omitempty"`
+        Status     int           `json:"status,omitempty"`
+        Records    []*TodoRecord `json:"records,omitempty"`
+        ExecuteIds []string      `json:"executeIds,omitempty"`
+        TodoStatus int           `json:"todoStatus,omitempty"`
+    }
+
+    UserTodo {
+    	ID         string `json:"id,omitempty"`
+    	UserId     string `json:"userId,omitempty"`
+    	UserName   string `json:"userName,omitempty"`
+    	TodoId     string `json:"todoId,omitempty"`
+    	TodoStatus int    `json:"todoStatus,omitempty"`
+    }
+
+    TodoInfoResp  {
+        ID         string        `json:"id,omitempty"`
+        CreatorId  string        `json:"creatorId,omitempty"`
+        CreatorName string       `json:"creatorName,omitempty"`
+        Title      string        `json:"title,omitempty"`
+        DeadlineAt int64         `json:"deadlineAt,omitempty"`
+        Desc       string        `json:"desc,omitempty"`
+        Records    []*TodoRecord `json:"records,omitempty"`
+        ExecuteIds []*UserTodo   `json:"executeIds,omitempty"`
+        Status     int           `json:"status,omitempty"`
+        TodoStatus int           `json:"todoStatus,omitempty"`
+    }
+
+    FinishedTodoReq {
+        UserId string `json:"userId"`
+        TodoId string `json:"todoId"`
+    }
+
+    todoListReq {
+        Id          string `form:"id,omitempty"`
+        UserId      string `form:"userId,omitempty"`
+        Page        int    `form:"page,omitempty"`
+        Count       int    `form:"count,omitempty"`
+        StartTime  int64 `form:"startTime,omitempty"`
+        EndTime     int64 `form:"endTime,omitempty"`
+    }
+
+    todoListResp {
+        Count int64  `json:"count"`
+        List []*Todo `json:"data"`
+    }
+)
+
+@server(
+    group: v1/todo
+    logic: Todo
+    middleware: Jwt
+)
+service todo {
+    @server(
+        handler: Info
+        logic: Todo.Info
+    )
+    get /:id(IdPathReq) returns (TodoInfoResp)
+
+    @server(
+        handler: Create
+        logic: Todo.Create
+    )
+    post / (Todo) returns (IdResp)
+
+    @server(
+        handler: Edit
+        logic: Todo.Edit
+    )
+    put / (Todo)
+
+    @server(
+        handler: Delete
+        logic: Todo.Delete
+    )
+    delete /:id(IdPathReq)
+
+    @server(
+        handler: Finish
+        logic: Todo.Finish
+        doc: 完成待办
+    )
+    post /finish(FinishedTodoReq)
+
+    @server(
+        handler: CreateRecord
+        logic: Todo.CreateRecord
+        doc: 用户操作记录
+    )
+    post /record (TodoRecord)
+
+    @server(
+        handler: List
+        logic: Todo.List
+        doc: 待办列表
+    )
+    get /list (todoListReq) returns(todoListResp)
+}

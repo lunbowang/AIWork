@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 控制台</title>
+  <link rel="stylesheet" href="/web/styles.css">
+</head>
+<body>
+  <header>
+    <h1>AI 控制台</h1>
+    <nav>
+      <input id="base-url" placeholder="http://127.0.0.1:8888" style="width:200px">
+      <button id="save-base-url">保存后端地址</button>
+      <button id="nav-login">登录</button>
+      <button id="nav-todo">待办</button>
+      <button id="nav-approval">审批</button>
+      <button id="nav-chat">聊天</button>
+      <button id="nav-upload">上传</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="page-login" class="page hidden">
+      <h2>管理员登录（不需要 token）</h2>
+      <form id="form-login-admin">
+        <label>用户名 <input name="name" required></label>
+        <label>密码 <input name="password" type="password" required></label>
+        <button type="submit">管理员登录</button>
+      </form>
+      <pre id="login-admin-result"></pre>
+
+      <h2>用户登录（获取 token）</h2>
+      <form id="form-login-user">
+        <label>用户名 <input name="name" required></label>
+        <label>密码 <input name="password" type="password" required></label>
+        <button type="submit">用户登录</button>
+      </form>
+      <pre id="login-user-result"></pre>
+    </section>
+
+    <section id="page-todo" class="page hidden">
+      <h2>待办</h2>
+      <form id="form-todo-create">
+        <input name="title" placeholder="标题" required>
+        <input name="deadlineAt" placeholder="截止时间时间戳">
+        <input name="executeIds" placeholder="执行人ID,逗号分隔">
+        <textarea name="desc" placeholder="描述"></textarea>
+        <button type="submit">创建</button>
+      </form>
+      <div class="toolbar">
+        <input id="todo-userId" placeholder="用户ID">
+        <button id="todo-refresh">刷新列表</button>
+      </div>
+      <table id="todo-table">
+        <thead><tr><th>ID</th><th>标题</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="page-approval" class="page hidden">
+      <h2>审批</h2>
+      <div class="toolbar">
+        <input id="approval-userId" placeholder="用户ID">
+        <select id="approval-type">
+          <option value="">全部类型</option>
+          <option value="1">类型1</option>
+          <option value="2">类型2</option>
+        </select>
+        <button id="approval-refresh">刷新列表</button>
+      </div>
+      <table id="approval-table">
+        <thead><tr><th>ID</th><th>标题</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="page-chat" class="page hidden">
+      <h2>聊天</h2>
+      <div class="chat-box">
+        <div id="chat-log" class="log"></div>
+        <form id="form-chat" class="row">
+          <input name="prompts" placeholder="输入消息" required>
+          <button type="submit">发送</button>
+        </form>
+      </div>
+      <div class="upload-box">
+        <input type="file" id="file-input">
+        <button id="btn-upload">上传并入库</button>
+      </div>
+      <div class="ws-box">
+        <input id="ws-url" placeholder="ws://127.0.0.1:8081/ws">
+        <button id="ws-connect">连接WS</button>
+        <button id="ws-disconnect">断开WS</button>
+      </div>
+    </section>
+
+    <section id="page-upload" class="page hidden">
+      <h2>上传</h2>
+      <input type="file" id="upload-file">
+      <button id="upload-file-btn">上传文件</button>
+      <pre id="upload-result"></pre>
+    </section>
+  </main>
+
+  <footer>
+    <small>前端仅供演示，直接调用后端接口。</small>
+  </footer>
+
+  <script src="/web/app.js"></script>
+</body>
+</html>
+

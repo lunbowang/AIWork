@@ -1,0 +1,98 @@
+syntax = "v1"
+
+info (
+    title: "后台系统admin"
+    author: "gitee.com/dn-jinmin"
+)
+
+type (
+    User {
+       Id            string `json:"id,omitempty"`
+       Password      string `json:"password,omitempty"`
+       Name          string `json:"name,omitempty"`
+       Status        int    `json:"status,omitempty"`
+    }
+    loginReq {
+       Name string `json:"name,omitempty"`
+       Password string `json:"password,omitempty"`
+    }
+    loginResp {
+       Status       int    `json:"status,omitempty"`
+       Id           string `json:"id,omitempty"`
+       Name         string `json:"name,omitempty"`
+       AccessToken  string `json:"token,omitempty"`
+       AccessExpire int64  `json:"accessExpire,omitempty"`
+       RefreshAfter int64  `json:"refreshAfter,omitempty"`
+    }
+
+    userListReq {
+        Ids   []string `json:"ids,omitempty"`
+        Name  string `json:"name,omitempty"`
+        Page  int    `json:"page,omitempty"`
+        Count int    `json:"count,omitempty"`
+    }
+    userListResp {
+        Count int64  `json:"count"`
+        List []*User `json:"data"`
+    }
+    upPasswordReq {
+        Id     string `json:"id"`
+        OldPwd string `json:"oldPwd"`
+        NewPwd string `json:"newPwd"`
+    }
+)
+
+@server(
+    group: v1/user
+    logic: User
+)
+service User {
+    @server (
+        handler: Login
+        logic: User.Login
+    )
+    post /login(loginReq) returns (loginResp)
+}
+
+@server(
+    group: /v1/user
+    logic: User
+    middleware: Jwt
+)
+service user {
+    @server (
+        handler: Info
+        logic: User.Info
+    )
+    get /:id(IdPathReq) returns(User)
+
+    @server (
+        handler: Create
+        logic: User.Create
+    )
+    post / (User)
+
+    @server (
+        handler: Edit
+        logic: User.Edit
+    )
+    put / (User)
+
+    @server (
+        handler: Delete
+        logic: User.Delete
+    )
+    delete /:id(IdPathReq)
+
+    @server (
+        handler: List
+        logic: User.List
+    )
+    get /list(userListReq) returns (userListResp)
+
+    @server (
+        handler: UpPassword
+        logic: User.UpPassword
+    )
+    post /password(upPasswordReq)
+}

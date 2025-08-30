@@ -1,0 +1,10 @@
+Name: api
+Addr: 0.0.0.0:8888
+
+MySql:
+  DataSource: "root:root@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai"
+
+Redis:
+  Addr: "127.0.0.1:6379"
+  Password: ""
+  DB: 0

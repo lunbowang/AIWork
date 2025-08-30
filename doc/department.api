@@ -1,0 +1,105 @@
+syntax = "v1"
+
+info (
+	title: "后台系统admin"
+	author: "gitee.com/dn-jinmin"
+)
+
+type (
+    Department {
+        Id       string `json:"id, omitempty"`
+        Name     string `json:"name, omitempty"`
+        ParentId string `json:"parentId, omitempty"`
+        ParentPath string `json:"parentPath, omitempty"`
+        Level    int    `json:"level, omitempty"`
+        LeaderId string `json:"leaderId, omitempty"`
+        Leader   string `json:"leader, omitempty"`
+        Count    int64  `json:"count, omitempty"`
+        Child   []*Department `json:"child, omitempty"`
+    }
+
+    DepartmentUser {
+        Id          string `json:"id,omitempty"`
+        UserId      string `json:"user,omitempty"`
+        DepId       string `json:"dep,omitempty"`
+        UserName    string `json:"userName,omitempty"`
+    }
+
+    DepartmentListReq {
+        DepId   string   `json:"depId,omitempty"`
+        DepIds  []string   `json:"depIds,omitempty"`
+    }
+
+    DepPathReq {
+        DepId string `path:"depId,omitempty"`
+        UserId string `path:"userId,omitempty"`
+    }
+
+    SetDepUser {
+        DepId   string   `json:"depId"`
+        UserIds []string `json:"userIds"`
+    }
+
+    DepartmentSoaResp {
+        Id       string `json:"id, omitempty"`
+        Name     string `json:"name, omitempty"`
+        ParentId string `json:"parentId, omitempty"`
+        Level    int    `json:"level, omitempty"`
+        LeaderId string `json:"leaderId, omitempty"`
+        Leader   string `json:"leader, omitempty"`
+        Count    int64  `json:"count, omitempty"`
+        Users    []*DepartmentUser `json:"users, omitempty"`
+        Child   []*Department `json:"child, omitempty"`
+    }
+)
+
+@server(
+    middleware: Jwt
+    group: v1/dep
+    logic: Department
+)
+service department {
+    @server(
+        handler: Soa
+        logic: Department.Soa
+    )
+    get /soa returns(DepartmentSoaResp)
+
+    @server(
+        handler: Info
+        logic: Department.Info
+    )
+    get /:id(IdPathReq) returns(Department)
+
+    @server(
+        handler: Create
+        logic: Department.Create
+    )
+    post / (Department)
+
+    @server(
+        handler: Edit
+        logic: Department.Edit
+    )
+    put / (Department)
+
+    @server(
+        handler: Delete
+        logic: Department.Delete
+    )
+    delete /:id(IdPathReq)
+
+    @server(
+        handler: SetDepUsers
+        logic: Department.SetDepUsers
+    )
+    post /user (SetDepUser)
+
+    @server(
+        handler: DepUserInfo
+        logic: Department.DepUserInfo
+        doc: 获取用户的部门信息
+    )
+    get /user/:id(IdPathReq)  returns(Department)
+}
+

@@ -1,0 +1,15 @@
+syntax = "v1"
+
+import "base.api"
+
+import "user.api"
+import "department.api"
+import "todo.api"
+import "approval.api"
+import "chat.api"
+
+info (
+	title: "后台系统admin"
+	author: "gitee.com/dn-jinmin"
+	serviceMod: 1
+)
